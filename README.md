@@ -1,45 +1,48 @@
 # Jewellery Visual Search Engine
 
-This project uses pretrained MobileNetV2 to turn jewellery images into embedding vectors. FAISS compares a query vector with the saved catalog vectors, and Streamlit displays the most similar products.
+This project is a visual search engine for jewellery images. It allows the user to upload an image or take a photo using the camera and then displays similar jewellery items.
 
-## Project structure
+## How It Works
 
-```text
-jewelry_search/
-├── data/
-│   ├── images/
-│   ├── embeddings.npy
-│   └── filenames.npy
-├── prepare_data.py
-├── evaluate.py
-├── app.py
-└── requirements.txt
-```
+1. The jewellery images are loaded from the dataset.
+2. MobileNetV2 extracts an embedding vector from every image.
+3. The embeddings are saved in `embeddings.npy`.
+4. FAISS compares the uploaded image with the saved embeddings.
+5. Streamlit displays the top similar jewellery images.
 
-## Run the project
+## Project Files
 
-Open a terminal inside the project folder and run:
+* `app.py`: Runs the Streamlit application.
+* `prepare_data.py`: Processes the images and creates the embeddings.
+* `requirements.txt`: Contains the required Python libraries.
+* `data/embeddings.npy`: Contains the saved image embeddings.
+* `data/filenames.npy`: Contains the image file paths.
+* `data/images`: Contains the jewellery dataset.
+
+## Run the Project
+
+Install the required libraries:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Create the embeddings if they have not already been created:
+
+```bash
 python prepare_data.py
-python evaluate.py
+```
+
+Run the Streamlit application:
+
+```bash
 streamlit run app.py
 ```
 
-Run `prepare_data.py` only when catalog images change. It creates `data/embeddings.npy` and `data/filenames.npy`. Both files must be uploaded to GitHub before deploying on Streamlit Community Cloud.
+## Application Features
 
-## Streamlit Cloud fix
-
-The error `No such file or directory: data/embeddings.npy` means the embeddings were not generated or were not committed to GitHub. This solution also uses absolute paths based on `app.py`, so it does not depend on Streamlit's working directory.
-
-## Discussion answers
-
-### Semantic gap
-
-A silver ring and a gold ring with the same setting can be visually similar in shape but different in color. Whether it is relevant depends on what the user wants. A future version could combine visual similarity with filters such as item type, metal, and color.
-
-### Improving Precision@5
-
-Precision can be improved by adding more varied training images, fine-tuning MobileNetV2 on jewellery, using a stronger pretrained model, improving image quality, or training with triplet loss. The simplest first improvement is to fine-tune the model using labelled jewellery images.
-
+* Upload a jewellery image.
+* Take a photo using the camera.
+* Display the uploaded image.
+* Find the top 25 visually similar items.
+* Show a message when no similar jewellery is found.
